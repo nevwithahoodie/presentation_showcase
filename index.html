@@ -23,16 +23,15 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .acc{color:var(--acc)}
 /* title */
 .hero{flex-direction:row;align-items:center;justify-content:space-between;gap:4vw}
-.maze{width:min(38vw,52vh);flex:none}
-.maze path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:square;stroke-dasharray:1;stroke-dashoffset:1}
-.on .maze path{animation:draw 3.2s .5s var(--ease) forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-.dot{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--acc);opacity:0;offset-path:path("M20 20 H380 V380 H60 V60 H340 V340 H100 V100 H300 V300 H140 V140 H260 V260 H180 V180 H220");offset-rotate:0deg;box-shadow:0 0 0 0 rgba(43,77,255,.4)}
-.on .dot{animation:run 4.2s 3.5s cubic-bezier(.5,0,.3,1) forwards,pulse 2s 7.7s infinite}
-@keyframes run{0%{opacity:1;offset-distance:0}100%{opacity:1;offset-distance:100%}}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(43,77,255,.45)}100%{box-shadow:0 0 0 22px rgba(43,77,255,0)}}
-.mz{position:relative}
-.mz .dot{left:calc(-8px + 20/400*100%);top:calc(-8px + 20/400*100%)}
+.orb{position:relative;width:min(36vw,50vh);aspect-ratio:1;flex:none}
+.ring{position:absolute;inset:var(--o);border:1.5px solid var(--c);border-radius:50%;transform:scale(.4);opacity:0;transition:transform 1.5s var(--ease),opacity 1.2s;transition-delay:calc(var(--k)*200ms + 300ms)}
+.on .ring{transform:none;opacity:1}
+.core{position:absolute;inset:43%;border-radius:50%;background:var(--ink);transform:scale(0);transition:transform 1s var(--ease) 1.2s}
+.on .core{transform:none}
+.orbit{position:absolute;inset:var(--o);opacity:0;transition:opacity 1s 1.7s;animation:spin var(--t) linear infinite}
+.on .orbit{opacity:1}
+.orbit::after{content:"";position:absolute;top:calc(var(--z)/-2);left:calc(50% - var(--z)/2);width:var(--z);height:var(--z);border-radius:50%;background:var(--dc)}
+@keyframes spin{to{transform:rotate(360deg)}}
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:3vw;margin-top:9vh}
 .step{position:relative;padding-top:2.2vh}
@@ -74,7 +73,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .names{margin-top:6vh;color:var(--mut);font-size:clamp(14px,1.4vw,22px);line-height:1.7;max-width:48ch}
 @media(max-width:900px){
 .slide{padding:8vh 6vw;overflow:auto;justify-content:flex-start}
-.hero{flex-direction:column;align-items:flex-start;justify-content:center}.maze{width:60vw}
+.hero{flex-direction:column;align-items:flex-start;justify-content:center}.orb{width:60vw}
 .steps,.grid,.split{grid-template-columns:1fr}.steps{gap:3vh}
 .row{flex-direction:column;gap:.5vh}.row span,.row.p span{text-align:left;max-width:none}
 #hint{display:none}}
@@ -90,9 +89,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
     <h1 class="t" data-s>Labirinto Alieno</h1>
     <p class="sub r" style="--d:6;margin-top:4vh">Progettazione del dominio di un videogioco</p>
   </div>
-  <div class="mz r" style="--d:2">
-    <svg class="maze" viewBox="0 0 400 400"><path pathLength="1" d="M20 20 H380 V380 H60 V60 H340 V340 H100 V100 H300 V300 H140 V140 H260 V260 H180 V180 H220"/></svg>
-    <span class="dot"></span>
+  <div class="orb">
+    <div class="ring" style="--o:0;--c:#dfe2e9;--k:0"></div>
+    <div class="ring" style="--o:16%;--c:#c3c8d4;--k:1"></div>
+    <div class="ring" style="--o:32%;--c:var(--ink);--k:2"></div>
+    <div class="core"></div>
+    <div class="orbit" style="--o:0;--t:16s;--z:16px;--dc:var(--acc)"></div>
+    <div class="orbit" style="--o:16%;--t:10s;--z:10px;--dc:var(--ink);animation-direction:reverse"></div>
   </div>
 </section>
 
