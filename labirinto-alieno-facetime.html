@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Labirinto Alieno – FaceTime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#34c759;--gd:#1d8f3f;--gt:#eef9f1;--ink:#14201a;--mute:#6a766f;--line:#e4e9e6;--f:'Manrope',-apple-system,'Segoe UI',Roboto,sans-serif}
+html,body{height:100%;background:#fff;color:var(--ink);font-family:var(--f);overflow:hidden}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(var(--s,1))}
+.slide{position:absolute;inset:0;padding:130px 170px 120px;opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .6s}
+.slide.on .a{animation:up .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*90ms + 150ms)}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+h1{font-size:168px;line-height:.95;font-weight:800;letter-spacing:-.045em}
+h2{font-size:74px;line-height:1.08;font-weight:800;letter-spacing:-.035em;max-width:1300px}
+h3{font-size:34px;font-weight:700;letter-spacing:-.01em}
+.lead{font-size:32px;line-height:1.5;color:var(--mute);max-width:960px;margin-top:34px}
+.sm{font-size:24px;line-height:1.5;color:var(--mute)}
+.g{color:var(--gd)}
+code{font-family:inherit;font-weight:700;color:var(--gd);background:var(--gt);padding:2px 10px;border-radius:8px;font-size:.92em}
+.kick{font-size:24px;font-weight:700;color:var(--gd);margin-bottom:26px}
+
+/* cover */
+.cover{display:flex;flex-direction:column;justify-content:center}
+.cover::after{content:"";position:absolute;right:-260px;top:50%;width:900px;height:900px;margin-top:-450px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7be495,var(--g) 55%,#2aa84b);opacity:.95}
+.cover .lead{max-width:820px}
+.team{margin-top:76px;font-size:26px;line-height:1.7;color:var(--mute);max-width:900px}
+.team b{color:var(--ink);font-weight:700}
+.cover>*{position:relative;z-index:1}
+
+/* progetto */
+.two{display:grid;grid-template-columns:1fr 640px;gap:140px;align-items:center;height:100%}
+.lv{list-style:none}
+.lv li{display:flex;gap:34px;align-items:baseline;padding:26px 0;border-top:1px solid var(--line)}
+.lv li:last-child{border-bottom:1px solid var(--line)}
+.lv b{font-size:30px;color:var(--gd);width:34px}
+.lv span{font-size:28px;font-weight:600}
+.facts{display:flex;gap:90px;margin-top:70px}
+.facts b{display:block;font-size:84px;font-weight:800;letter-spacing:-.04em;color:var(--gd);line-height:1}
+.facts span{font-size:22px;color:var(--mute)}
+
+/* grids */
+.grid{display:grid;gap:64px 80px;margin-top:84px}
+.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g5{grid-template-columns:repeat(5,1fr);gap:50px}
+.it{border-top:2px solid var(--line);padding-top:26px}
+.it .n{font-size:22px;font-weight:700;color:var(--gd);margin-bottom:14px}
+.it h3{margin-bottom:12px}
+.it p{font-size:23px;line-height:1.5;color:var(--mute)}
+.rules{margin-top:70px}
+.rule{display:grid;grid-template-columns:90px 1fr;align-items:baseline;padding:27px 0;border-top:1px solid var(--line);font-size:31px;line-height:1.4;font-weight:500}
+.rule:last-child{border-bottom:1px solid var(--line)}
+.rule b{font-size:44px;font-weight:800;color:var(--g)}
+.rule em{font-style:normal;font-weight:700;color:var(--gd)}
+.big{font-size:100px;font-weight:800;letter-spacing:-.04em;color:var(--gd);line-height:1;margin-bottom:18px}
+
+/* model */
+.tree{display:flex;flex-direction:column;align-items:center;margin-top:60px}
+.bx{border:2px solid var(--line);border-radius:22px;padding:20px 40px;font-size:30px;font-weight:700;text-align:center;background:#fff;min-width:330px}
+.bx small{display:block;font-size:19px;font-weight:500;color:var(--mute);margin-top:4px}
+.bx.m{background:var(--g);border-color:var(--g);color:#fff}.bx.m small{color:#e9ffef}
+.vl{width:2px;height:40px;background:var(--line)}
+.br{display:flex;gap:260px;position:relative;padding-top:40px}
+.br::before{content:"";position:absolute;top:0;left:165px;right:165px;height:2px;background:var(--line)}
+.br::after{content:"";position:absolute;top:-40px;left:50%;height:40px;width:2px;background:var(--line)}
+.col{display:flex;flex-direction:column;align-items:center;position:relative}
+.col::before{content:"";position:absolute;top:-40px;height:40px;width:2px;background:var(--line)}
+.cap{text-align:center;margin-top:46px;font-size:25px;color:var(--mute)}
+
+/* pattern */
+.pat{display:grid;grid-template-columns:600px 1fr;gap:110px;margin-top:56px;align-items:center}
+.vis{padding:48px 54px;border-radius:32px;background:var(--gt);min-height:380px;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.fl{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.fl i{font-style:normal;color:var(--gd);font-size:30px;font-weight:700}
+.fb{background:#fff;border-radius:18px;padding:16px 26px;font-size:25px;font-weight:700;box-shadow:0 1px 0 rgba(20,32,26,.06)}
+.fb small{display:block;font-size:17px;color:var(--mute);font-weight:500}
+.fb.d{background:transparent;border:2px dashed #b8d9c2;color:var(--mute)}
+.fb.st{background:var(--g);color:#fff;transition:.3s}.fb.st.lock{background:#14201a}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+button{font:700 20px var(--f);padding:13px 24px;border-radius:999px;border:2px solid var(--g);background:#fff;color:var(--gd);cursor:pointer;transition:.2s}
+button:hover,button.p{background:var(--g);color:#fff}
+.log{font-size:21px;color:var(--mute);min-height:30px}
+.bar{height:14px;border-radius:7px;background:#fff;overflow:hidden;flex:1}.bar u{display:block;height:100%;background:var(--g);transition:width .5s}
+.me{display:grid;grid-template-columns:90px 1fr 50px;gap:16px;align-items:center;font-size:21px;font-weight:700;width:100%}
+.ft{display:grid;grid-template-columns:1fr 1fr 1fr;gap:70px;margin-top:64px}
+.ft h4{font-size:21px;font-weight:700;color:var(--gd);margin-bottom:10px}
+.ft p{font-size:23px;line-height:1.5;color:var(--mute)}
+
+/* chrome */
+.brand{position:absolute;left:170px;bottom:56px;font-size:20px;font-weight:700;display:flex;align-items:center;gap:12px;color:var(--mute);z-index:5}
+.brand i{width:14px;height:14px;border-radius:50%;background:var(--g)}
+.pg{position:absolute;right:170px;bottom:56px;font-size:20px;font-weight:700;color:var(--mute);z-index:5}
+.bar0{position:fixed;left:0;top:0;height:5px;background:var(--g);width:0;transition:width .5s;z-index:9}
+.nav{position:fixed;right:24px;bottom:20px;display:flex;gap:8px;z-index:9;opacity:.35;transition:.3s}.nav:hover{opacity:1}
+.nav button{width:42px;height:42px;padding:0;font-size:18px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div class="bar0" id="bar"></div>
+<main class="stage" id="stage">
+
+<section class="slide cover">
+ <h1 class="a">Labirinto<br>Alieno</h1>
+ <p class="lead a">Dal glossario al diagramma delle classi: come abbiamo progettato un videogioco con cinque Design Pattern.</p>
+ <p class="team a"><b>Gruppo FaceTime</b><br>Navpreet Singh, Alejandro Iacobucci Diaz, Alessandro Moretton, Thomas Solinas Elia, Alessio Martinello, Lorenzo Del Puppo<br><span style="color:var(--gd);font-weight:700">Presenta Navpreet Singh</span></p>
+</section>
+
+<section class="slide">
+ <div class="two">
+  <div>
+   <h2 class="a">Un Comandante, un satellite, un labirinto.</h2>
+   <p class="lead a">Un videogioco di esplorazione e sopravvivenza: si atterra, si allestisce il campo base, poi si entra tra alieni, porte chiuse e guardiani.</p>
+   <div class="facts a"><div><b>3</b><span>vite iniziali</span></div><div><b>0–100</b><span>salute e scudo</span></div><div><b>5</b><span>livelli analizzati</span></div></div>
+  </div>
+  <ul class="lv a">
+   <li><b>1</b><span>Contesto e missione</span></li>
+   <li><b>2</b><span>Atterraggio ed esplorazione</span></li>
+   <li><b>5</b><span>Porte, chiavi e guardiani</span></li>
+   <li><b>7</b><span>Sopravvivenza</span></li>
+   <li><b>8</b><span>Multipiattaforma</span></li>
+  </ul>
+ </div>
+</section>
+
+<section class="slide">
+ <h2 class="a">Dal dominio alle classi, in otto passi.</h2>
+ <div class="grid g4">
+  <div class="it a"><div class="n">1</div><h3>Analisi</h3><p>Termini, significati e sinonimi da evitare.</p></div>
+  <div class="it a"><div class="n">2</div><h3>Brainstorm</h3><p>Sticky notes su Miro, ognuno dice la sua.</p></div>
+  <div class="it a"><div class="n">3</div><h3>Pulizia</h3><p>Via i doppioni, tutto nel glossario.</p></div>
+  <div class="it a"><div class="n">4</div><h3>Raggruppamento</h3><p>Diagrammi di Venn: classi o attributi.</p></div>
+  <div class="it a"><div class="n">5</div><h3>Scheletro</h3><p>Attributi e metodi alle classi.</p></div>
+  <div class="it a"><div class="n">6</div><h3>Relazioni</h3><p>Molteplicità, ereditarietà, associazioni.</p></div>
+  <div class="it a"><div class="n">7</div><h3>Comportamento</h3><p>Chi collabora e come cambia lo stato.</p></div>
+  <div class="it a"><div class="n">8</div><h3>Pattern</h3><p>Quale, perché, quali alternative.</p></div>
+ </div>
+ <p class="sm a" style="margin-top:70px">Strategia top down, con un glossario condiviso dal gruppo.</p>
+</section>
+
+<section class="slide">
+ <h2 class="a">Cinque regole che il modello deve garantire.</h2>
+ <div class="rules">
+  <div class="rule a"><b>1</b><span>Il <em>Comandante</em> è un personaggio controllabile e partecipa a <em>una sola Partita</em> alla volta.</span></div>
+  <div class="rule a"><b>2</b><span>Salute e scudo restano sempre nell’intervallo <em>0–100</em>.</span></div>
+  <div class="rule a"><b>3</b><span>Una Partita inizia con <em>tre vite</em>.</span></div>
+  <div class="rule a"><b>4</b><span>Una porta bloccata si apre <em>solo con la chiave richiesta</em>.</span></div>
+  <div class="rule a"><b>5</b><span>Il custode si affronta <em>solo dopo aver eliminato tutti i soldati</em> della stanza.</span></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2 class="a">Sei ambiti, trentuno classi e interfacce.</h2>
+ <div class="grid g3" style="gap:60px 90px">
+  <div class="it a"><div class="big">12</div><h3>Architettura</h3><p>Entità, Comandante, Alieno, Stanza, Porta…</p></div>
+  <div class="it a"><div class="big">3</div><h3>Livello 1 · Narrativa</h3><p>Partita, MissioneRecupero, Satellite</p></div>
+  <div class="it a"><div class="big">3</div><h3>Livello 2 · Meccaniche</h3><p>NaveSpaziale, Indizio, LivelloAtterraggio</p></div>
+  <div class="it a"><div class="big">3</div><h3>Livello 5 · Ostacoli</h3><p>StatoPorta, PortaBloccata, PortaSbloccata</p></div>
+  <div class="it a"><div class="big">5</div><h3>Livello 7 · Sopravvivenza</h3><p>GestoreDanno, Scudo, Salute, KitMedicale, HUD</p></div>
+  <div class="it a"><div class="big">5</div><h3>Livello 8 · Infrastruttura</h3><p>MotoreGioco, Renderer, OpenGL, DirectX, Factory</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2 class="a">Una sola Entità, due rami.</h2>
+ <div class="tree a">
+  <div class="bx m">Entità<small>astratta: salute, scudo, attacca()</small></div>
+  <div class="br">
+   <div class="col"><div class="bx">MembroEquipaggio</div><div class="vl"></div><div class="bx">Comandante<small>vite</small></div></div>
+   <div class="col"><div class="bx">Alieno</div><div class="vl"></div><div class="bx">Guardiano<small>custodisce una Key</small></div></div>
+  </div>
+ </div>
+ <p class="cap a">Attacco e danno si scrivono una volta e valgono per tutti.</p>
+</section>
+
+<section class="slide">
+ <h2 class="a">Cinque problemi, cinque pattern.</h2>
+ <div class="grid g5">
+  <div class="it a"><div class="n">Livello 5</div><h3>State</h3><p>La porta cambia comportamento con lo stato.</p></div>
+  <div class="it a"><div class="n">Livello 7</div><h3>Chain of Responsibility</h3><p>Il danno passa prima dallo scudo, poi dalla salute.</p></div>
+  <div class="it a"><div class="n">Livello 7</div><h3>Observer</h3><p>L’HUD si aggiorna quando cambia il Comandante.</p></div>
+  <div class="it a"><div class="n">Livello 8</div><h3>Bridge</h3><p>Il motore è separato dalla libreria grafica.</p></div>
+  <div class="it a"><div class="n">Livello 8</div><h3>Factory</h3><p>Una fabbrica sceglie OpenGL o DirectX.</p></div>
+ </div>
+</section>
+
+<!--PATTERNS-->
+
+<section class="slide">
+ <h2 class="a">Un colpo d’alieno, quattro pattern in azione.</h2>
+ <div class="fl a" style="margin-top:90px;gap:26px;flex-wrap:nowrap;align-items:stretch">
+  <div class="it" style="flex:1"><div class="n">Attacco</div><h3>Alieno</h3><p>attacca(30) colpisce il Comandante.</p></div><i style="align-self:center;color:var(--g)">→</i>
+  <div class="it" style="flex:1"><div class="n">Chain of Responsibility</div><h3>Scudo, poi salute</h3><p>Il residuo passa al gestore successivo.</p></div><i style="align-self:center;color:var(--g)">→</i>
+  <div class="it" style="flex:1"><div class="n">Observer</div><h3>HUD</h3><p>aggiornaDati() mostra i nuovi valori.</p></div><i style="align-self:center;color:var(--g)">→</i>
+  <div class="it" style="flex:1"><div class="n">Bridge</div><h3>Renderer</h3><p>disegnaScena() sulla libreria scelta.</p></div>
+ </div>
+ <div class="ft a" style="grid-template-columns:1fr 1fr;margin-top:90px">
+  <div><h4>All’avvio, Factory</h4><p>RendererFactory sceglie OpenGL o DirectX e consegna al motore solo l’interfaccia.</p></div>
+  <div><h4>Alle porte, State</h4><p>PortaBloccata diventa PortaSbloccata quando arriva la Key.</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2 class="a">Cosa ci portiamo a casa.</h2>
+ <div class="grid g3" style="gap:60px 90px">
+  <div class="it a"><h3>Prima il dominio</h3><p style="margin-top:10px">Glossario, regole e ambiti hanno guidato le classi. I pattern sono venuti dopo.</p></div>
+  <div class="it a"><h3>Pattern con un motivo</h3><p style="margin-top:10px">Ognuno risolve un problema preciso e ha un’alternativa valutata.</p></div>
+  <div class="it a"><h3>Pronto a crescere</h3><p style="margin-top:10px">Nuove porte, gestori di danno o API grafiche senza riscrivere il resto.</p></div>
+ </div>
+ <div class="facts a" style="margin-top:110px"><div><b>31</b><span>classi e interfacce</span></div><div><b>5</b><span>design pattern</span></div><div><b>6</b><span>ambiti</span></div><div><b>5</b><span>regole di dominio</span></div></div>
+</section>
+
+<section class="slide cover">
+ <h1 class="a" style="font-size:190px">Domande?</h1>
+ <p class="lead a">Grazie per l’attenzione.</p>
+ <p class="team a"><b>Gruppo FaceTime</b><br>Presenta Navpreet Singh</p>
+</section>
+</main>
+
+<div class="nav"><button id="pv">←</button><button id="nx">→</button></div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+/* pattern slides */
+const P=[
+{n:'State',lv:'Livello 5',pr:'Il comportamento di apri() dipende dallo stato della porta.',
+ vis:`<div class="fl"><div class="fb">Porta<small>delega a</small></div><i>→</i><div class="fb st lock" id="ds">PortaBloccata</div></div><div class="btns"><button class="p" data-x="dO">porta.apri()</button><button data-x="dK">Raccogli la Key</button><button data-x="dR">Reset</button></div><div class="log" id="dl">Una porta bloccata si apre solo con la chiave richiesta.</div>`,
+ w:'Ogni stato è una classe: niente if sparsi e nuovi stati senza toccare Porta.',a:'Un flag booleano con condizionali: funziona con due stati, si ingarbuglia al terzo.',c:'Porta, StatoPorta, PortaBloccata, PortaSbloccata'},
+{n:'Chain of Responsibility',lv:'Livello 7',pr:'Il danno deve intaccare prima lo scudo e solo il residuo la salute.',
+ vis:`<div class="fl"><div class="fb">Colpo</div><i>→</i><div class="fb">GestoreScudo</div><i>→</i><div class="fb">GestoreSalute</div></div><div class="me"><span>Scudo</span><div class="bar"><u id="bs" style="width:100%"></u></div><span id="ns">100</span></div><div class="me"><span>Salute</span><div class="bar"><u id="bh" style="width:100%"></u></div><span id="nh">100</span></div><div class="btns"><button class="p" data-x="hit">Colpisci −30</button><button data-x="cR">Reset</button></div><div class="log" id="cl">Premi “Colpisci”: il danno attraversa la catena.</div>`,
+ w:'L’ordine sta nel modello, non in un if: ogni nuova protezione è un anello in più.',a:'Un unico subisciDanno() con if annidati, sempre più fragile.',c:'GestoreDanno, GestoreScudo, GestoreSalute, Comandante'},
+{n:'Observer',lv:'Livello 7',pr:'L’HUD deve restare aggiornato, ma il Comandante non deve conoscere la grafica.',
+ vis:`<div class="fl"><div class="fb">Comandante<small>notifica</small></div><i>→</i><div class="fb st">HUD<small style="color:#e9ffef">aggiornaDati()</small></div></div><div class="fl"><div class="fb d">Audio</div><div class="fb d">Log</div><span class="sm">possibili altri osservatori</span></div>`,
+ w:'Il Comandante notifica e basta: nessun polling e logica separata dall’interfaccia.',a:'L’HUD che interroga il Comandante a ogni frame, o il Comandante che disegna i propri valori.',c:'Commandante, HUD'},
+{n:'Bridge',lv:'Livello 8',pr:'Il motore di gioco deve funzionare con più librerie grafiche, e le due parti evolvono separate.',
+ vis:`<div class="fl"><div class="fb">MotoreGioco</div><i>→</i><div class="fb st">Renderer<small style="color:#e9ffef">interfaccia</small></div></div><div class="fl" style="margin-left:250px"><div class="fb">OpenGLRenderer</div><div class="fb">DirectXRenderer</div></div><div class="log">Con l’ereditarietà le classi crescono come M×N, con il Bridge come M+N.</div>`,
+ w:'Motore e libreria grafica cambiano per motivi diversi: due gerarchie collegate da un riferimento.',a:'Ereditarietà (MotoreOpenGL, MotoreDirectX…), con classi che crescono come prodotto.',c:'MotoreGioco, Renderer, OpenGLRenderer, DirectXRenderer'},
+{n:'Factory',lv:'Livello 8',pr:'Chi decide quale Renderer istanziare?',
+ vis:`<div class="fl"><div class="fb st">RendererFactory<small style="color:#e9ffef">creaRenderer()</small></div><i>→</i><div class="fb" id="fr">Renderer</div></div><div class="btns"><button data-x="fW">Windows</button><button data-x="fL">Linux o macOS</button></div><div class="log" id="fg">Scegli la piattaforma.</div>`,
+ w:'La scelta avviene in un solo punto e il motore vede solo l’interfaccia.',a:'new diretto dentro MotoreGioco con if sul sistema operativo: il motore conoscerebbe le classi concrete.',c:'RendererFactory, Renderer, OpenGLRenderer, DirectXRenderer'}
+];
+$('main').innerHTML=$('main').innerHTML.replace('<!--PATTERNS-->',P.map((p,i)=>`<section class="slide"><div class="kick a">Pattern ${i+1} di 5 · ${p.lv}</div><h2 class="a">${p.n}</h2><div class="pat a"><p class="lead" style="margin:0">${p.pr}</p><div class="vis">${p.vis}</div></div><div class="ft a"><div><h4>Perché</h4><p>${p.w}</p></div><div><h4>Alternativa scartata</h4><p>${p.a}</p></div><div><h4>Classi coinvolte</h4><p>${p.c}</p></div></div></section>`).join(''));
+
+const S=[...document.querySelectorAll('.slide')];let cur=-1;
+S.forEach((s,k)=>{s.querySelectorAll('.a').forEach((e,i)=>e.style.setProperty('--i',i));if(k&&k<S.length-1){s.insertAdjacentHTML('beforeend',`<div class="brand"><i></i>FaceTime · Labirinto Alieno</div><div class="pg">${k+1} / ${S.length}</div>`)}});
+function go(n){n=Math.max(0,Math.min(S.length-1,n));if(n===cur)return;S[cur]?.classList.remove('on');cur=n;S[n].classList.add('on');$('#bar').style.width=(n+1)/S.length*100+'%';history.replaceState(null,'','#'+(n+1))}
+function fit(){$('#stage').style.setProperty('--s',Math.min(innerWidth/1920,innerHeight/1080))}
+addEventListener('resize',fit);fit();
+$('#nx').onclick=()=>go(cur+1);$('#pv').onclick=()=>go(cur-1);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.()}});
+let tx=0;addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>60)go(cur+(d<0?1:-1))},{passive:true});
+
+/* demos */
+const L=(id,t)=>{const e=$('#'+id);if(e)e.textContent=t};
+let locked=true,sc=100,hp=100,lives=3,os='';
+const door=()=>{const e=$('#ds');e.textContent=locked?'PortaBloccata':'PortaSbloccata';e.classList.toggle('lock',locked)};
+const bars=()=>{$('#bs').style.width=sc+'%';$('#bh').style.width=hp+'%';L('ns',sc);L('nh',hp)};
+const X={
+ dO:()=>L('dl',locked?'PortaBloccata.apri(): accesso negato, serve la chiave.':'PortaSbloccata.apri(): porta aperta.'),
+ dK:()=>{locked=false;door();L('dl','Key raccolta: la Porta passa a PortaSbloccata.')},
+ dR:()=>{locked=true;door();L('dl','Reset: la porta torna a PortaBloccata.')},
+ hit:()=>{const p=30,ab=Math.min(sc,p),r=p-ab,l=Math.min(hp,r);sc-=ab;hp-=l;let m=`Scudo assorbe ${ab}`+(r?`, residuo ${r} alla salute`:'');if(hp<=0){lives--;hp=100;m+=lives>0?`. perdiVita(): restano ${lives}`:'. Vite esaurite, reset';if(lives<=0){sc=100;lives=3}}bars();L('cl',m)},
+ cR:()=>{sc=100;hp=100;lives=3;bars();L('cl','Stato ripristinato: scudo 100, salute 100, 3 vite.')},
+ fW:()=>{os='DirectXRenderer';L('fr',os);L('fg','Windows: creaRenderer() restituisce new DirectXRenderer().')},
+ fL:()=>{os='OpenGLRenderer';L('fr',os);L('fg','Linux o macOS: creaRenderer() restituisce new OpenGLRenderer().')}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(b){X[b.dataset.x]();b.blur()}});
+go((parseInt(location.hash.slice(1))||1)-1);
+})();
+</script>
+</body>
+</html>
